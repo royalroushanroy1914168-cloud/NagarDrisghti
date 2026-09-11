@@ -6,13 +6,23 @@ from functools import wraps
 from datetime import datetime, timezone
 import sqlite3, os, secrets
 
-app=Flask(__name__)
-CORS(app, supports_credentials=True, origins=os.getenv("FRONTEND_ORIGIN","*"))
-BASE=Path(__file__).parent
-DB=BASE/"nagar.db"
-UPLOADS=BASE/"uploads"; UPLOADS.mkdir(exist_ok=True)
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "success",
+        "message": "NagarDrishti backend is running"
+    })
+
+CORS(app, supports_credentials=True, origins=os.getenv("FRONTEND_ORIGIN", "*"))
+
+BASE = Path(__file__).parent
+DB = BASE / "nagar.db"
+UPLOADS = BASE / "uploads"
+UPLOADS.mkdir(exist_ok=True)
 DEPT_USER=os.getenv("DEPT_USER","roushan")
-DEPT_HASH=os.getenv("DEPT_PASSWORD_HASH",generate_password_hash("1914168"))
+DEPT_HASH=os.getenv("DEPT_PASSWORD_HASH")
 TOKENS=set()
 
 def db():
