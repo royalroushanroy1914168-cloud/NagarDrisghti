@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Problem | NagarDrishti</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="navbar"><div class="logo">🏙️ <b>NagarDrishti</b></div><nav><a href="index.html">Home</a><a href="track.html">Track</a><a href="department-login.html">Department Login</a></nav></header>
+<main class="container">
+<h1>Report a Civic Problem</h1>
+<p>Submit the details below. You do not need an account.</p>
+<form id="reportForm" class="form card">
+<label>Name<input name="citizen_name" required></label>
+<label>Mobile / Email<input name="contact" required></label>
+<label>Problem Type
+<select name="problem_type" required>
+<option value="">Select</option><option>Pothole</option><option>Broken Footpath</option><option>Streetlight</option><option>Garbage</option><option>Blocked Drain</option><option>Water Leak</option><option>Other</option>
+</select></label>
+<label>Description<textarea name="description" rows="4" required></textarea></label>
+<label>Photo<input name="image" type="file" accept="image/*" required></label>
+<div class="row"><label>Latitude<input id="lat" name="latitude" readonly></label><label>Longitude<input id="lng" name="longitude" readonly></label></div>
+<button class="btn" type="button" id="locationBtn">📍 Get My Location</button>
+<button class="btn" type="submit">Submit Report</button>
+<p id="msg"></p>
+</form>
+</main>
+<script src="config.js"></script><script src="report.js"></script>
+</body></html>

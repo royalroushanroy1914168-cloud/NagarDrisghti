@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Department Login</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="login"><div class="card form"><h1>🔐 Department Login</h1><p>Authorized department personnel only.</p>
+<label>Username<input id="username" autocomplete="username"></label>
+<label>Password<input id="password" type="password" autocomplete="current-password"></label>
+<button class="btn" onclick="login()">Login</button><p id="msg"></p></div></main>
+<script src="config.js"></script><script>
+async function login(){const msg=document.getElementById('msg');try{const r=await fetch(API_BASE+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,password:password.value}),credentials:'include'});const d=await r.json();if(!r.ok)throw Error(d.error||'Login failed');sessionStorage.setItem('dept_token',d.token);location.href='department-dashboard.html'}catch(e){msg.textContent=e.message}}
+</script></body></html>

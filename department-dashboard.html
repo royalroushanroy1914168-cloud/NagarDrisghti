@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Department Dashboard</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="navbar"><div class="logo">🏛️ <b>Department Dashboard</b></div><button class="btn" onclick="logout()">Logout</button></header>
+<main class="container"><h1>Citizen Reports</h1><div id="reports">Loading...</div></main>
+<script src="config.js"></script><script>
+const token=sessionStorage.getItem('dept_token');if(!token)location.href='department-login.html';
+async function load(){const r=await fetch(API_BASE+'/reports',{headers:{Authorization:'Bearer '+token}});if(!r.ok){logout();return}const ds=await r.json();document.getElementById('reports').innerHTML=ds.map(d=>`<div class="card report"><h2>#${d.id} — ${d.problem_type}</h2><p><b>Citizen:</b> ${d.citizen_name} | <b>Contact:</b> ${d.contact}</p><p><b>Description:</b> ${d.description}</p><p><b>Location:</b> ${d.latitude}, ${d.longitude}</p><p><b>Priority:</b> ${d.priority_score}</p><p><b>Submitted:</b> ${d.created_at}</p><select onchange="status(${d.id},this.value)">${['Pending','Assigned','In Progress','Resolved'].map(s=>`<option ${s===d.status?'selected':''}>${s}</option>`).join('')}</select></div>`).join('')||'<p>No reports yet.</p>'}
+async function status(id,s){await fetch(API_BASE+'/reports/'+id+'/status',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({status:s})});load()}
+function logout(){sessionStorage.removeItem('dept_token');location.href='department-login.html'}load();
+</script></body></html>

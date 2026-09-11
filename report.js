@@ -1,0 +1,3 @@
+const form=document.getElementById('reportForm'),msg=document.getElementById('msg');
+document.getElementById('locationBtn').onclick=()=>navigator.geolocation.getCurrentPosition(p=>{lat.value=p.coords.latitude;lng.value=p.coords.longitude},()=>msg.textContent='Location permission was not granted.');
+form.onsubmit=async e=>{e.preventDefault();msg.textContent='Submitting...';const fd=new FormData(form);try{const r=await fetch(API_BASE+'/reports',{method:'POST',body:fd});const d=await r.json();if(!r.ok)throw Error(d.error||'Submission failed');msg.innerHTML='Report submitted! Your Report ID is <b>#'+d.id+'</b>. Save this ID to track it.';form.reset()}catch(err){msg.textContent=err.message}};

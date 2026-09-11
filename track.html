@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Track Report</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="navbar"><div class="logo">🏙️ <b>NagarDrishti</b></div><nav><a href="index.html">Home</a><a href="report.html">Report</a><a href="department-login.html">Department Login</a></nav></header>
+<main class="container"><h1>Track Your Report</h1><div class="card form"><label>Report ID<input id="reportId" placeholder="e.g. 12"></label><button class="btn" onclick="track()">Check Status</button><div id="result"></div></div></main>
+<script src="config.js"></script><script>
+async function track(){const id=document.getElementById('reportId').value.trim();const r=document.getElementById('result');if(!id){r.innerHTML='<p>Enter a report ID.</p>';return}try{const x=await fetch(API_BASE+'/reports/'+id);if(!x.ok)throw Error();const d=await x.json();r.innerHTML='<hr><h2>'+d.problem_type+'</h2><p><b>Status:</b> '+d.status+'</p><p><b>Priority:</b> '+d.priority_score+'</p><p>'+d.description+'</p>'}catch(e){r.innerHTML='<p>Report not found.</p>'}}
+</script></body></html>

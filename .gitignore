@@ -1,0 +1,4 @@
+nagar.db
+uploads/*
+.env
+__pycache__/
