@@ -4,6 +4,72 @@
 <label>Username<input id="username" autocomplete="username"></label>
 <label>Password<input id="password" type="password" autocomplete="current-password"></label>
 <button class="btn" onclick="login()">Login</button><p id="msg"></p></div></main>
+  <button type="button" onclick="showReset()">Forgot Password?</button>
+
+<div id="resetBox" style="display:none;">
+    <h3>Reset Password</h3>
+
+    <input id="resetUsername" type="text" placeholder="Username">
+
+    <input id="resetCode" type="password" placeholder="Reset Code">
+
+    <input id="newPassword" type="password" placeholder="New Password">
+
+    <input id="confirmPassword" type="password" placeholder="Confirm New Password">
+
+    <button type="button" onclick="resetPassword()">Reset Password</button>
+
+    <p id="resetMessage"></p>
+</div>
 <script src="config.js"></script><script>
 async function login(){const msg=document.getElementById('msg');try{const r=await fetch(API_BASE+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,password:password.value}),credentials:'include'});const d=await r.json();if(!r.ok)throw Error(d.error||'Login failed');sessionStorage.setItem('dept_token',d.token);location.href='department-dashboard.html'}catch(e){msg.textContent=e.message}}
-</script></body></html>
+</script>
+<script>
+function showReset() {
+    document.getElementById("resetBox").style.display = "block";
+}
+
+async function resetPassword() {
+    const username = document.getElementById("resetUsername").value.trim();
+    const resetCode = document.getElementById("resetCode").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const message = document.getElementById("resetMessage");
+
+    if (newPassword !== confirmPassword) {
+        message.textContent = "Passwords do not match.";
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            API_BASE + "/department/reset-password",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    reset_code: resetCode,
+                    new_password: newPassword
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+            message.textContent =
+                "Password reset successfully. You can now log in.";
+        } else {
+            message.textContent =
+                data.error || "Password reset failed.";
+        }
+    } catch (error) {
+        message.textContent = "Unable to connect to server.";
+    }
+}
+</script>
+</body>
+</html>
