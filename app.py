@@ -11,8 +11,8 @@ CORS(app, supports_credentials=True, origins=os.getenv("FRONTEND_ORIGIN","*"))
 BASE=Path(__file__).parent
 DB=BASE/"nagar.db"
 UPLOADS=BASE/"uploads"; UPLOADS.mkdir(exist_ok=True)
-DEPT_USER=os.getenv("DEPT_USER","department")
-DEPT_HASH=os.getenv("DEPT_PASSWORD_HASH",generate_password_hash("ChangeThisPassword"))
+DEPT_USER=os.getenv("DEPT_USER","roushan")
+DEPT_HASH=os.getenv("DEPT_PASSWORD_HASH",generate_password_hash("1914168"))
 TOKENS=set()
 
 def db():
