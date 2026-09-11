@@ -1,9 +1,0 @@
-__pycache__/
-*.py[cod]
-venv/
-.env
-nagar_drishti.db
-backend/uploads/*
-!backend/uploads/.gitkeep
-.vscode/
-.DS_Store
