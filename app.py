@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from pathlib import Path
 from functools import wraps
 from datetime import datetime, timezone
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3, os, secrets
 
 app = Flask(__name__)
@@ -23,6 +24,8 @@ UPLOADS = BASE / "uploads"
 UPLOADS.mkdir(exist_ok=True)
 DEPT_USER=os.getenv("DEPT_USER","roushan")
 DEPT_HASH=os.getenv("DEPT_PASSWORD_HASH")
+RESET_CODE = os.getenv("DEPT_RESET_CODE")
+RESET_PASSWORD_HASH = None
 TOKENS=set()
 
 def db():
@@ -96,3 +99,34 @@ def upload(name): from flask import send_from_directory; return send_from_direct
 if __name__=="__main__":
     db().close()
     app.run(host="0.0.0.0",port=int(os.getenv("PORT",5000)))
+if __name__ == "__main__":
+    db().close()
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))  
+    
+    @app.route("/api/department/reset-password", methods=["POST"])
+def reset_department_password():
+    global RESET_PASSWORD_HASH
+
+    data = request.get_json() or {}
+
+    username = data.get("username", "").strip()
+    reset_code = data.get("reset_code", "")
+    new_password = data.get("new_password", "")
+
+    if username != DEPT_USER:
+        return jsonify({"error": "Invalid username"}), 401
+
+    if not RESET_CODE or reset_code != RESET_CODE:
+        return jsonify({"error": "Invalid reset code"}), 401
+
+    if len(new_password) < 8:
+        return jsonify({"error": "Password must be at least 8 characters"}), 400
+
+    RESET_PASSWORD_HASH = generate_password_hash(new_password)
+
+    return jsonify({
+        "status": "success",
+        "message": "Password reset successfully"
+    })
+
+
